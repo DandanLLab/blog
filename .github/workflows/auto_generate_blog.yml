@@ -8,6 +8,7 @@ on:
       - 'generate_sitemap.py'
       
       - 'md/**'
+      - 'generate_issues.py'
       - 'requirements.txt'
     branches:
       - master
@@ -34,7 +35,10 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Generate content
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        python generate_issues.py
         python generate_blog.py
         python generate_data_json.py
         python generate_sitemap.py

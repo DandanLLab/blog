@@ -1,4 +1,4 @@
-var blog_title = "天天的小站 | 玄蛋秘阁 ";
+var blog_title = "蛋蛋知识库 | DandanLLab 公开知识门户";
 
 class StaticBlog {
     constructor() {
@@ -51,6 +51,7 @@ class StaticBlog {
             this.initRouter();
             this.initNavigation();
             this.initEventListeners();
+            this.initSearch(); this.initTheme(); this.initArchive(); this.initBackTop();
             this.showPostList(); // 显示文章列表
         } catch (error) {
             this.showError('初始化失败: ' + error.message);
@@ -503,3 +504,154 @@ class StaticBlog {
 // 初始化博客
 const blog = new StaticBlog();
 document.addEventListener('DOMContentLoaded', () => blog.init());
+
+/* ═══ 魔改层：搜索 / 暗色 / 归档时间轴 / 回顶（StaticBlog.prototype 注入）═══ */
+Object.assign(StaticBlog.prototype, {
+  initSearch() {
+    const input = document.getElementById('search-input');
+    const box = document.getElementById('search-results');
+    if (!input || !box) return;
+    let timer = null;
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => this.doSearch(input.value.trim()), 160);
+    });
+    input.addEventListener('keydown', (e) => {
+      const hits = [...box.querySelectorAll('.search-hit')];
+      if (!hits.length) return;
+      let i = hits.findIndex(h => h.classList.contains('active'));
+      if (e.key === 'ArrowDown') { e.preventDefault(); i = Math.min(i + 1, hits.length - 1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); i = Math.max(i - 1, 0); }
+      else if (e.key === 'Enter') { e.preventDefault(); (hits[Math.max(i, 0)] || hits[0]).click(); return; }
+      else return;
+      hits.forEach(h => h.classList.remove('active'));
+      hits[i].classList.add('active');
+      hits[i].scrollIntoView({ block: 'nearest' });
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-wrap')) box.style.display = 'none';
+    });
+  },
+  doSearch(q) {
+    const box = document.getElementById('search-results');
+    if (!q || q.length < 1) { box.style.display = 'none'; return; }
+    const kw = q.toLowerCase();
+    const scored = [];
+    for (const p of this.state.allPosts) {
+      const title = (p.title || '').toLowerCase();
+      const content = (p.content || '').toLowerCase();
+      const tags = (p.tags || []).join(' ').toLowerCase();
+      let score = 0;
+      if (title.includes(kw)) score += 100;
+      if (tags.includes(kw)) score += 40;
+      const at = content.indexOf(kw);
+      if (at >= 0) { score += 10 + (1000 - Math.min(at, 1000)) / 200; }
+      if (score > 0) scored.push({ p, score, at });
+    }
+    scored.sort((a, b) => b.score - a.score);
+    const top = scored.slice(0, 8);
+    if (!top.length) {
+      box.innerHTML = '<div class="search-empty">没有找到「' + q.replace(/</g, '&lt;') + '」相关文章</div>';
+      box.style.display = 'block'; return;
+    }
+    box.innerHTML = top.map(({ p, at }) => {
+      const src = p.content || '';
+      let snip = '';
+      if (at >= 0) {
+        const start = Math.max(0, at - 18);
+        snip = (start > 0 ? '…' : '') + src.slice(start, at + 48) + '…';
+      } else {
+        snip = src.slice(0, 66) + '…';
+      }
+      const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const hl = t => esc(t).replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
+        m => '<mark>' + m + '</mark>');
+      return '<div class="search-hit" data-path="' + esc(p.path || '') + '">' +
+        '<div class="hit-title">' + hl(p.title || '') + '</div>' +
+        '<div class="hit-snip">' + hl(snip) + '</div></div>';
+    }).join('');
+    box.style.display = 'block';
+    box.querySelectorAll('.search-hit').forEach(el => {
+      el.addEventListener('click', () => {
+        box.style.display = 'none';
+        document.getElementById('search-input').value = '';
+        const path = el.getAttribute('data-path');
+        const post = this.state.allPosts.find(x => x.path === path);
+        if (post) this.showPost(post);
+      });
+    });
+  },
+  initTheme() {
+    const btn = document.getElementById('theme-btn');
+    const saved = localStorage.getItem('kb-theme');
+    const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    this.applyTheme(saved || (prefers ? 'dark' : 'light'), false);
+    if (btn) btn.addEventListener('click', () => {
+      const cur = document.documentElement.getAttribute('data-theme');
+      this.applyTheme(cur === 'dark' ? 'light' : 'dark', true);
+    });
+  },
+  applyTheme(mode, save) {
+    document.documentElement.setAttribute('data-theme', mode);
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = mode === 'dark' ? '☀️' : '🌙';
+    if (save) localStorage.setItem('kb-theme', mode);
+  },
+  initArchive() {
+    const btn = document.getElementById('archive-btn');
+    if (btn) btn.addEventListener('click', () => {
+      const v = document.getElementById('archiveView');
+      if (v.style.display === 'none') { this.showArchive(); history.pushState(null, '', '?view=archive'); }
+      else { this.hideArchive(); history.pushState(null, '', location.pathname); }
+    });
+    const params = new URLSearchParams(location.search);
+    if (params.get('view') === 'archive') this.showArchive();
+  },
+  showArchive() {
+    const v = document.getElementById('archiveView');
+    const list = document.getElementById('postList');
+    if (!v) return;
+    list.style.display = 'none';
+    const groups = {};
+    for (const p of this.state.allPosts) {
+      const d = (p.created || '').slice(0, 7);
+      if (!d) continue;
+      (groups[d] = groups[d] || []).push(p);
+    }
+    const keys = Object.keys(groups).sort().reverse();
+    let html2 = '<h2 class="archive-title">🗂 归档时间轴 · 共 ' + this.state.allPosts.length + ' 篇</h2>';
+    for (const k of keys) {
+      const [y, m] = k.split('-');
+      html2 += '<div class="tl-month">' + y + ' 年 ' + Number(m) + ' 月 · ' + groups[k].length + ' 篇</div>';
+      html2 += '<ul class="tl-list">' + groups[k].map(p =>
+        '<li class="tl-item"><span class="tl-date">' + (p.created || '').slice(5, 10) + '</span>' +
+        '<a href="?path=' + encodeURIComponent(p.path || '') + '" data-arch-path="' +
+        (p.path || '').replace(/"/g, '&quot;') + '">' + (p.title || '无题') + '</a></li>').join('') + '</ul>';
+    }
+    v.innerHTML = html2;
+    v.style.display = 'block';
+    window.scrollTo(0, 0);
+    v.querySelectorAll('.tl-item a').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const path = a.getAttribute('data-arch-path');
+        const post = this.state.allPosts.find(x => x.path === path);
+        if (post) this.showPost(post);
+      });
+    });
+  },
+  hideArchive() {
+    const v = document.getElementById('archiveView');
+    if (v) v.style.display = 'none';
+    const list = document.getElementById('postList');
+    if (list) list.style.display = '';
+  },
+  initBackTop() {
+    const btn = document.getElementById('backTop');
+    if (!btn) return;
+    window.addEventListener('scroll', () => {
+      btn.style.display = window.scrollY > 420 ? 'block' : 'none';
+    }, { passive: true });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+});

@@ -28,10 +28,21 @@
             <span class="site-title">蛋蛋知识库</span>
             
         </div>
+        <div class="kb-toolbar">
+            <div class="search-wrap">
+                <input type="search" id="search-input" class="search-input" placeholder="搜索文章…（标题/正文/标签）" autocomplete="off">
+                <div class="search-results" id="search-results" style="display:none"></div>
+            </div>
+            <div class="toolbar-actions">
+                <button id="archive-btn" class="tool-btn" title="归档时间轴">🗂 归档</button>
+                <button id="theme-btn" class="tool-btn" title="明暗切换">🌙</button>
+            </div>
+        </div>
         <nav class="main-nav" id="nav"></nav>
 
         <main class="content-area">
             <section class="post-list" id="postList"></section>
+            <section class="archive-view" id="archiveView" style="display:none"></section>
             <div id="loading" style="display: none;">加载中...</div>
             <article class="post-detail" id="postDetail">
                 <article class="markdown-body">
@@ -209,6 +220,7 @@
     </script>
 
 
+    <button id="backTop" class="back-top" title="回到顶部" style="display:none">↑</button>
 </body>
 
 </html>
