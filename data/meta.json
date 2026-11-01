@@ -1,15 +1,14 @@
 {
-    "total": 23,
+    "total": 22,
     "page_size": 10,
     "page_count": 3,
-    "last_updated": "2026-11-01T02:03:36.931997",
+    "last_updated": "2026-11-01T02:10:26.998592",
     "data_files": [
         "page_1.json",
         "page_2.json",
         "page_3.json"
     ],
     "categories": [
-        "公开",
         "其他",
         "史",
         "结绳",
