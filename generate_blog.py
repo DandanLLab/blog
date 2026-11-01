@@ -29,6 +29,19 @@ def load_config():
         merged_config['generator'].update(user_config['generator'])
     return merged_config
 
+def _git_commit_time(path):
+    """文件的首次提交时间（秒）；非 Git 文件返回 None 走文件系统时间兜底。"""
+    import subprocess
+    try:
+        r = subprocess.run(
+            ["git", "log", "--follow", "--diff-filter=A", "--format=%at", "--", path],
+            capture_output=True, text=True, timeout=10)
+        lines = [l.strip() for l in r.stdout.splitlines() if l.strip()]
+        return int(lines[-1]) if lines else None
+    except Exception:
+        return None
+
+
 def generate_blog_data():
     try:
         config = load_config()['generator']
@@ -59,9 +72,13 @@ def generate_blog_data():
                 if category == '.':
                     category = ''
                 
-                # File times
-                ctime = os.path.getctime(file_path)
-                mtime = os.path.getmtime(file_path)
+                # File times —— Git 提交时间为真源（师父令：真实上传时间戳，不是批量重构时间）
+                git_time = _git_commit_time(file_path)
+                if git_time is not None:
+                    ctime = mtime = git_time
+                else:
+                    ctime = os.path.getctime(file_path)
+                    mtime = os.path.getmtime(file_path)
                 created = datetime.datetime.fromtimestamp(ctime).strftime(time_format)
                 modified = datetime.datetime.fromtimestamp(mtime).strftime(time_format)
                 archive = datetime.datetime.fromtimestamp(ctime).strftime('%Y-%m')
