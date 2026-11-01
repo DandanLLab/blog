@@ -3,6 +3,15 @@ import json
 import datetime
 import re
 
+# 站点时间一律按东八区渲染。CI runner 是 UTC，若用 fromtimestamp 的默认本地时区，
+# 同一提交在本地是 11:27、在 Actions 里变成 03:27，00:00-08:00 的提交还会跨天。
+TZ = datetime.timezone(datetime.timedelta(hours=8))
+
+
+def _local(ts):
+    """时间戳 -> 东八区 datetime。"""
+    return datetime.datetime.fromtimestamp(ts, tz=TZ)
+
 DEFAULT_CONFIG = {
     'generator': {
         'md_dir': 'md',
@@ -104,9 +113,9 @@ def generate_blog_data():
                 else:
                     ctime = os.path.getctime(file_path)
                     mtime = os.path.getmtime(file_path)
-                created = datetime.datetime.fromtimestamp(ctime).strftime(time_format)
-                modified = datetime.datetime.fromtimestamp(mtime).strftime(time_format)
-                archive = datetime.datetime.fromtimestamp(ctime).strftime('%Y-%m')
+                created = _local(ctime).strftime(time_format)
+                modified = _local(mtime).strftime(time_format)
+                archive = _local(ctime).strftime('%Y-%m')
                 
                 # Parse tags
                 post_tags = []
@@ -142,8 +151,9 @@ def generate_blog_data():
                     '_timestamp': ctime
                 })
 
-        # Sort posts
-        posts.sort(key=lambda x: x['_timestamp'], reverse=True)
+        # Sort posts：同一秒的（批量上传常见）按路径定序，否则顺序随文件系统遍历漂移，
+        # 每次构建都会产出看似不同、实则等价的 data 改动。
+        posts.sort(key=lambda x: (-x['_timestamp'], x['path']))
         for post in posts:
             del post['_timestamp']
 
@@ -164,7 +174,7 @@ def generate_blog_data():
                     'page': idx,
                     'page_size': page_size,
                     'total': total,
-                    'generated': datetime.datetime.now().isoformat()
+                    'generated': datetime.datetime.now(TZ).isoformat()
                 },
                 'posts': chunk
             }
@@ -176,7 +186,7 @@ def generate_blog_data():
             'total': total,
             'page_size': page_size,
             'page_count': page_count,
-            'last_updated': datetime.datetime.now().isoformat(),
+            'last_updated': datetime.datetime.now(TZ).isoformat(),
             'data_files': [f'page_{i}.json' for i in range(1, page_count+1)],
             'categories': categories,
             'archives': archives,
