@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """GitHub Issues → md/公开/issues/（写 issue 打 label「公开」即上门户，sl1673495/blogs 同款通道）"""
-import json, os, re, urllib.request
+import json, os, re, urllib.request, urllib.parse
 
 REPO = os.environ.get("GITHUB_REPOSITORY", "DandanLLab/blog")
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
@@ -17,7 +17,7 @@ def api(url):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    issues = api("https://api.github.com/repos/%s/issues?state=open&labels=%s&per_page=50" % (REPO, LABEL))
+    issues = api("https://api.github.com/repos/%s/issues?state=open&labels=%s&per_page=50" % (REPO, urllib.parse.quote(LABEL)))
     keep = set()
     for it in issues:
         if "pull_request" in it:

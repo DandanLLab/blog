@@ -37,6 +37,7 @@ jobs:
     - name: Generate content
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PYTHONIOENCODING: utf-8
       run: |
         python generate_issues.py
         python generate_blog.py
