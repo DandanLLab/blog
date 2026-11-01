@@ -592,3 +592,13 @@ pre:hover .code-copy {
 #donateButton:hover { transform: scale(1.08) rotate(3deg); box-shadow: 0 8px 24px rgba(231,76,60,.45); }
 #donateModal .modal-content { border-radius: 14px; border: none; box-shadow: 0 20px 60px rgba(0,0,0,.28); }
 #donateModal .qr-code img { border-radius: 10px; border: 1px solid #f0e6d8; }
+
+/* ═══ 门户文案美化层 ═══ */
+.site-sub { font-size: 13px; color: #8a94a0; margin-left: 10px; font-weight: 400; }
+[data-theme="dark"] .site-sub { color: #6b7480; }
+.site-intro { background: linear-gradient(135deg, rgba(44,62,80,.04), rgba(231,76,60,.04));
+  border: 1px solid rgba(44,62,80,.08); border-radius: 12px; padding: 14px 18px;
+  margin: 12px 0 4px; font-size: 14px; line-height: 1.75; color: var(--text-color); }
+[data-theme="dark"] .site-intro { background: linear-gradient(135deg, rgba(138,180,248,.06), rgba(242,139,130,.05));
+  border-color: rgba(138,180,248,.12); }
+.site-intro b { color: var(--primary-color); }
