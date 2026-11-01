@@ -2,10 +2,21 @@
     "meta": {
         "page": 1,
         "page_size": 10,
-        "total": 22,
-        "generated": "2026-11-01T11:50:31.208883+08:00"
+        "total": 23,
+        "generated": "2026-11-01T11:54:07.468935+08:00"
     },
     "posts": [
+        {
+            "title": "20-知识__蛋蛋知识库站点说明.0fc689",
+            "created": "2026-11-01 11:53:52",
+            "modified": "2026-11-01 11:53:52",
+            "category": "公开",
+            "archive": "2026-11",
+            "path": "公开/20-知识__蛋蛋知识库站点说明.0fc689.md",
+            "tags": [],
+            "words": 217,
+            "plain": "--- title: 蛋蛋知识库·站点说明 type: knowledge 公开: true --- 蛋蛋知识库 · 站点说明 这里是 DandanLLab 的公开知识门户，收录可以公开分享的技术笔记、教程与知识沉淀。 本站为纯静态构建：文章源码托管于 GitHub（DandanLLab/blog），GitHub Actions 自动生成索引后由 GitHub Pages 发布，更新零手工。 知识库主体由「灵犀」个人知识库系统驱动，支持混合检索、MCP 接口与命令行客户端。"
+        },
         {
             "title": "termux安装docker",
             "created": "2025-03-21 11:27:02",
@@ -104,17 +115,6 @@
             "tags": [],
             "words": 1117,
             "plain": "js变量和函数 阅读使用Rhino作为JavaScript引擎以便于调用Java类和方法，查看ECMAScript兼容性表格 Rhino运行时懒加载导入的Java类和方法 构造函数 函数 对象 调用类 简要说明 ------------ ------------------------- ----------------------- ---------------------------------------------------------------------------------------------------------------------------------- --------------------- JavaImporter importClass importPackage ImporterTopLevel 导入Java类到JavaScript getClass Packages java javax ... NativeJavaTopPackage 默认导入JavaScript中的Java类 JavaAdapter JavaAdapter 继承Java类 注意 变量指向已经被阅读修改，如果想要调用 下的包，请使用 在书源规则中使用 可使用JavaScript调用阅读部分内置的类和方法 注意为了安全，阅读会屏蔽部分java类调用，见RhinoClassShutter 不同的书源规则中支持的调用的Java类和方法可能有所不同 变量名 调用类 -------------- ------------------------------------------------------------------------------------------------------------------ --- java 当前类 baseUrl 当前url,String result 上一步的结果 book 书籍类 chapter 章节类 source 基础书源类 cookie cookie操作类 cache 缓存操作类 title 章节当前标题 String src 请求返回的源码 nextChapterUrl 下一章节url 当前类对象的可使用的部分方法 RssJsExtensions 只能在订阅源 规则中使用 订阅添加跳转url拦截, js, 返回true拦截,js变量url,可以通过js打开url 例子https://github.com/gedoor/legado/discussions/3259 调用阅读搜索 添加书架 AnalyzeUrl 部分函数 js中通过java.调用,只在 规则中有效 AnalyzeRule 部分函数 获取文本/文本列表 待解析源代码，默认为当前页面 链接标识，默认为 设置解析内容 获取Ele"
-        },
-        {
-            "title": "ua 保存",
-            "created": "2025-03-21 11:27:02",
-            "modified": "2025-03-21 11:27:02",
-            "category": "阅读",
-            "archive": "2025-03",
-            "path": "阅读/ua 保存.md",
-            "tags": [],
-            "words": 0,
-            "plain": ""
         }
     ]
 }
