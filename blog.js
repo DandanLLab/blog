@@ -284,7 +284,7 @@ class StaticBlog {
     async showPost(post, opts) {
         const options = Object.assign({ push: true }, opts || {});
         try {
-            const content = post.content || await this.fetchContent(post.path);
+            const content = post.content || post.plain || await this.fetchContent(post.path);
             this.renderPost(post, content);
             if (options.push) history.pushState({}, '', `?path=${encodeURIComponent(post.path)}`);
         } catch (error) {
@@ -293,7 +293,8 @@ class StaticBlog {
     }
 
     async fetchContent(path) {
-        const response = await fetch(`${this.config.mdBasePath}${path}`);
+        const encoded = path.split('/').map(encodeURIComponent).join('/');
+        const response = await fetch(`${this.config.mdBasePath}${encoded}`);
         if (!response.ok) throw new Error('内容加载失败');
         return await response.text();
     }
