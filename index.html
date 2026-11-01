@@ -5,14 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>天天的小站|玄蛋秘阁</title>
+    <title>蛋蛋知识库 | DandanLLab 公开知识门户</title>
     <meta name="robots" content="all">
     <meta name="googlebot" content="ajax">
-    <meta name="description" content="天天的小站，一个专注于技术、生活和分享的个人博客。这里记录了我的学习心得、项目经验和生活感悟。">
-    <meta name="keywords" content="技术博客,个人博客,编程,生活感悟,项目经验,学习心得">
-    <link rel="canonical" href="https://blog.ttxz.eu.org/">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://blog.ttxz.eu.org/">
+    <meta name="description" content="蛋蛋知识库（DandanLLab）公开知识门户：技术笔记、知识库备份与公开文章，静态直读 + API 增量双通道。">
+    <meta name="keywords" content="知识库,技术博客,DandanLLab,蛋蛋知识库,公开知识,文章备份">
+    <link rel="canonical" href="https://kb.dandanllab.top/">
     <link rel="icon" href="icon.png" type="image/png">
     <link rel="stylesheet" href="normalize.min.css">
     <link rel="shortcut icon" href="icon.png">
@@ -20,7 +18,6 @@
     <link rel="stylesheet" href="github.min.css">
     <meta name="color-scheme" content="light dark">
     <link rel="stylesheet" href="github-markdown.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mgz0227/The-tutorial-of-Legado@main/index.css">
     <link rel="stylesheet" href="blog.css">
     
 </head>
@@ -28,7 +25,7 @@
 <body>
     <div class="container">
         <div><img src="icon.png" alt="网站图标" class="site-icon">
-            <span class="site-title">天天的小站</span>
+            <span class="site-title">蛋蛋知识库</span>
             
         </div>
         <nav class="main-nav" id="nav"></nav>
@@ -76,9 +73,6 @@
                     </div>
                     <hr>
                 </article>
-                <div class="giscus"></div>
-                <script src="https://giscus.app/client.js" data-repo="mctiantian2501314/blog" data-repo-id="R_kgDON6WRvw" data-category="General" data-category-id="DIC_kwDON6WRv84CoXQr" data-mapping="url" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="zh-CN" crossorigin="anonymous" async>
-                </script>
             </article>
 
         </main>
@@ -91,116 +85,23 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h4>版权信息</h4>
-                <p>&copy; 天天的鸟蛋蛋</p>
-                <p></p>
+                <p>&copy; 2024-2026 DandanLLab · 蛋蛋实验室</p>
             </div>
             <div class="footer-section">
                 <h4>联系作者</h4>
                 <ul>
-
-                    <li>GitHub<a href="//github.com/mctiantian2501314/" class="source-link source-ysqfby" target="_blank"> @mctiantian2501314</a></li>
+                    <li>GitHub<a href="https://github.com/DandanLLab" class="source-link" target="_blank"> @DandanLLab</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4>友情链接</h4>
+                <h4>站点导航</h4>
                 <ul>
-
-                    <li><a href="https://ged520-github-io.pages.dev/" target="_blank">辞之次元</a></li>
-                    <li><a href="https://jijianconvert.netlify.app/yuedutool" target="_blank">开源阅读/源阅发现转换工具</a></li>
-                    <li><a href="http://2280.eu.org:5080/" target="_blank">在线工具箱</a></li>
-                    <li><a href="http://2280.eu.org:8333/" target="_blank">发现规则</a></li>
-                    <li><a href="https://taoba.cf/" target="_blank">源社区</a></li>
-
-                    <li><a href="https://youfeng.pages.dev/" target="_blank">怣疯的个人主页</a></li>
-                    <li><a href="http://fb.shushan.vip:9999/" target="_blank">书山专享发布页
-                        </a></li>
-                    <li><a href="https://sbtool.us.kg/" target="_blank">🍟的工具箱</a></li>
-                    <li><a href="https://gitee.com/lff283/syrj/" target="_blank">活力宝日记</a></li>
-                    <li><a href="https://yckceo.vip/" target="_blank">木木源仓库</a></li>
-                    <li><a href="https://skybook.pages.dev/" target="_blank">明月书阁</a></li>
-                    <li><a href="https://www.yesui.me/" target="_blank">情无羁的空间</a></li>
-
-
-                </ul>
+                    <li><a href="https://www.dandanllab.top" target="_blank">主站</a></li>
+                    <li><a href="https://github.com/DandanLLab/blog" target="_blank">文章备份仓库</a></li>
                 </ul>
             </div>
         </div>
-
-
-
-        <div id="new-footer"></div>
-
-        <div id="timestamp-container"></div>
-
     </footer>
-
-
-
-
-    <script src="./libs/jquery/jquery-3.7.1.js"></script>
-    <script>
-        $(document).ready(function() {
-            const settings = {
-                async: true,
-                crossDomain: true,
-                url: 'https://api.ttxz.eu.org/proxy', // 发送到 FastAPI 服务器的代理路由
-                method: 'GET'
-            };
-
-            $.ajax(settings).done(function(response) {
-                // 检查请求是否成功
-                if (response.success) {
-                    // 获取数据
-                    var queryCount = response.result.totals.queryCount;
-                    var since = response.result.query.since;
-                    var until = response.result.query.until;
-                    var queryName = response.result.query.filters.split('==')[1];
-                    var limit = response.result.query.limit;
-                    var rows = response.result.rows;
-
-                    // 创建新的页脚内容
-                    var newFooterContent = `
-                        <div id="footer-stats" class="custom-footer">
-                                        <h4>cf查询统计</h4>
-                            <ul>
-                                <li>访问量：${queryCount}</li>
-                                <li>查询名称：${queryName}</li>
-                                <li>开始时间：${since}</li>
-                                <li>结束时间：${until}</li>
-                                <li>最大返回数：${limit}</li>
-                                <li>返回行数：${rows}</li>
-                            </ul>
-                        </div>
-                    `;
-
-                    // 将新的页脚内容添加到页面
-                    $('#new-footer').html(newFooterContent);
-                } else {
-                    console.error('请求失败:', response.errors);
-                }
-            }).fail(function(xhr, status, error) {
-                console.error('AJAX 请求失败:', error);
-            });
-        });
-    </script>
-
-    <script>
-        function fetchTimestamp() {
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "timestamp/sy_timestamp.json", true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-
-                    const data = JSON.parse(xhr.responseText);
-                    document.getElementById("timestamp-container").innerText = data.timestamp;
-                }
-            };
-            xhr.send();
-        }
-
-
-        window.onload = fetchTimestamp;
-    </script>
 
 
     <!--  cdnjs CDN -->
@@ -209,22 +110,7 @@
     <script src="./libs/highlight.js/highlight.min.js"></script>
     <script src="./libs/mathjax/es5/tex-mml-chtml.js"></script>
     <script src="blog.js"></script>
-    <script src="s.js"></script>
-    <link rel="stylesheet" href="./QPlayer/QPlayer.css">
-    <script src="./QPlayer/dist/QPlayer.js"></script>
-    <script src="./libs/darkreader/darkreader.min.js"></script>
 
-    <script id="js-code">
-        fetch('/QPlayer/QPlayer.json')
-            .then(response => response.json()) // 将响应解析为 JSON
-            .then(data => {
-                window.QPlayer.list = data; // 将读取到的数据赋值给 window.QPlayer.list
-                console.log(window.QPlayer.list); // 打印数据
-            })
-            .catch(error => {
-                console.error('读取文件失败：', error);
-            });
-    </script>
 
     <style>
         /* 打赏按钮样式 */
@@ -320,427 +206,6 @@
                 donateModal.style.display = "none";
             }
         }
-    </script>
-
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-  
-      
-        #advertised-modal {
-            display: flex;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            box-sizing: border-box;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        #advertised-modal.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .ad-modal-container {
-            background: white;
-            border-radius: var(--border-radius);
-            width: 85%;
-            max-width: 380px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-            position: relative;
-            transform: scale(0.95) translateY(20px);
-            animation: adSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        
-        @keyframes adSlideIn {
-            to { 
-                transform: scale(1) translateY(0); 
-                opacity: 1;
-            }
-        }
-        
-     .modal-ribbon {
-    position: absolute;
-    top: 30px; /* 修改为下移一点 */
-    right: -10px;
-    background: var(--accent-color);
-    color: white;
-    padding: 4px 32px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    text-align: center;
-    transform: rotate(45deg);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-}
-        
-        .modal-header {
-            background: var(--accent-color);
-            color: white;
-            padding: 15px 10px 12px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .modal-header h2 {
-            font-size: 1.15rem;
-            margin: 5px 0 3px;
-            font-weight: 600;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .modal-header p {
-            font-size: 0.8rem;
-            opacity: 0.9;
-            margin-bottom: 0;
-        }
-        
-        .modal-body {
-            padding: 15px;
-        }
-        
-        .modal-body p {
-            font-size: 0.85rem;
-            line-height: 1.5;
-            color: var(--text-color);
-            margin-bottom: 8px;
-            padding: 5px 8px;
-            position: relative;
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .p-icon {
-            min-width: 18px;
-            font-size: 0.9em;
-            color: var(--accent-color);
-            margin-right: 8px;
-            margin-top: 2px;
-        }
-        
-        .ad-image {
-            width: 100%;
-            margin: 10px 0 8px;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .ad-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        
-        .links-container {
-            padding: 8px 0;
-            margin: 8px 0;
-        }
-        
-        .link-item {
-            margin-bottom: 10px;
-            padding: 9px 12px;
-            background: #f8fafc;
-            border-radius: var(--border-radius);
-            display: flex;
-            align-items: center;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-        
-        .link-item:hover {
-            background-color: rgba(231, 76, 60, 0.05);
-            border-color: var(--accent-color);
-        }
-        
-        .link-icon {
-            font-size: 1rem;
-            color: var(--accent-color);
-            margin-right: 12px;
-        }
-        
-        .link-text {
-            flex: 1;
-            overflow: hidden;
-        }
-        
-        .link-text a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.83rem;
-            word-break: break-all;
-            display: block;
-        }
-        
-        .link-text a:hover {
-            color: var(--accent-color);
-            text-decoration: underline;
-        }
-        
-        .tags-ad {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            margin: 15px 0 10px;
-        }
-        
-        .tag-ad {
-            background: var(--accent-color);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
-        }
-        
-        .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 1.4rem;
-    color: white;
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.5); /* 添加黑色半透明背景 */
-    opacity: 0.9;
-    transition: all 0.3s ease;
-    z-index: 15;
-}
-
-.close-button:hover {
-    background: rgba(0, 0, 0, 0.8); /* 鼠标悬停时加深背景颜色 */
-    opacity: 1;
-    transform: rotate(90deg);
-}
-        
-        .countdown-container {
-            padding: 0 5px;
-            margin-top: 12px;
-        }
-        
-        .countdown-bar {
-            height: 6px;
-            background: #edf2f7;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        
-        .countdown-progress {
-            height: 100%;
-            width: 100%;
-            background: var(--primary-color);
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-        
-        .countdown-text {
-            font-size: 0.8rem;
-            color: #718096;
-            margin-top: 8px;
-            text-align: center;
-        }
-        
-        .close-instruction {
-            text-align: center;
-            font-size: 0.8rem;
-            color: #777;
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px dashed #e2e8f0;
-        }
-        
-@media (max-width: 768px) {
-    .modal-ribbon {
-        top: 20px; /* 保持下移一点 */
-        right: -20px;
-        font-size: 0.7rem;
-        padding: 3px 10px;
-    }
-
-    .close-button {
-        top: 4px;
-        right: 4px;
-        width: 20px;
-        height: 20px;
-        background: rgba(0, 0, 0, 0.5); /* 移动端也添加黑色半透明背景 */
-    }
-
-    .close-button:hover {
-        background: rgba(0, 0, 0, 0.8); /* 鼠标悬停时加深背景颜色 */
-    }
-}
-
-@media (max-width: 480px) {
-    .modal-ribbon {
-        top: 20px; /* 在更小屏幕上进一步下移 */
-        right: -20px;
-        font-size: 0.7rem;
-        padding: 3px 26px;
-    }
-
-    .close-button {
-        top: 4px;
-        right: 4px;
-        font-size: 0.95rem;
-        width: 20px;
-        height: 20px;
-        background: rgba(0, 0, 0, 0.5); /* 移动端也添加黑色半透明背景 */
-    }
-
-    .close-button:hover {
-        background: rgba(0, 0, 0, 0.8); /* 鼠标悬停时加深背景颜色 */
-    }
-}
-        
-        .demo-button {
-            display: block;
-            margin: 20px auto;
-            padding: 12px 25px;
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
-        
-        .demo-button:hover {
-            background: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
-        }
-    </style>
-
-    
-    <!-- 广告弹窗 -->
-    <div id="advertised-modal">
-        <div class="ad-modal-container">
-            <div class="modal-ribbon">限时优惠</div>
-            <div class="modal-header">
-                <h2><i class="fas fa-sim-card"></i> 大额流量卡免费领</h2>
-                <p>陌轩通讯 每日上新</p>
-                <span class="close-button">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="ad-image">
-                    <img src="https://s2.loli.net/2025/06/04/XsehWozJNU6kZVA.jpg" alt="流量卡广告">
-                </div>
-                
-                <div class="links-container">
-                    <div class="link-item">
-                        <div class="link-icon"><i class="fas fa-link"></i></div>
-                        <div class="link-text">
-                            <a href="https://sourl.cn/yrm8S6" target="_blank">https://sourl.cn/yrm8S6</a>
-                        </div>
-                    </div>
-                    <div class="link-item">
-                        <div class="link-icon"><i class="fas fa-link"></i></div>
-                        <div class="link-text">
-                            <a href="https://sourl.cn/ADdLJZ" target="_blank">https://sourl.cn/ADdLJZ</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <p><span class="p-icon"><i class="fas fa-tag"></i></span>免费申领，邮费全免，非物联卡</p>
-                <p><span class="p-icon"><i class="fas fa-check"></i></span>缺流量卡可选，支持异地注销</p>
-                <p><span class="p-icon"><i class="fas fa-clock"></i></span>优惠限量，售罄可选同类卡片</p>
-                <p><span class="p-icon"><i class="fas fa-id-card"></i></span>官方正品卡，需真实信息办理</p>
-                
-                <div class="tags-ad">
-                    <div class="tag-ad">好卡推荐</div>
-                    <div class="tag-ad">电话卡</div>
-                    <div class="tag-ad">流量卡</div>
-                </div>
-                
-                <div class="countdown-container">
-                    <div class="countdown-bar">
-                        <div class="countdown-progress" id="countdownProgress"></div>
-                    </div>
-                    <div class="countdown-text" id="countdownText">10秒后自动关闭</div>
-                </div>
-               
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 广告弹窗功能
-        function setupAdModal() {
-            const adModal = document.getElementById("advertised-modal");
-            const closeButton = document.querySelector(".close-button");
-            const countdownProgress = document.getElementById("countdownProgress");
-            const countdownText = document.getElementById("countdownText");
-            let timer;
-            
-            function closeAd() {
-                adModal.classList.remove("show");
-                clearInterval(timer);
-                if(adModal.timeout) clearTimeout(adModal.timeout);
-            }
-            
-            // 点击X关闭按钮
-            closeButton.addEventListener('click', closeAd);
-            
-            // 点击背景关闭
-            adModal.addEventListener('click', function(event) {
-                if (event.target === adModal) closeAd();
-            });
-            
-
-            
-            function startCountdown() {
-                let seconds = 10;
-                countdownText.textContent = `${seconds}秒后自动关闭`;
-                countdownProgress.style.width = "100%";
-                
-                timer = setInterval(() => {
-                    seconds--;
-                    countdownText.textContent = `${seconds}秒后自动关闭`;
-                    countdownProgress.style.width = `${seconds * 10}%`;
-                    
-                    if (seconds <= 0) {
-                        clearInterval(timer);
-                        closeAd();
-                    }
-                }, 1000);
-            }
-            
-            // 初始显示广告
-            adModal.timeout = setTimeout(() => {
-                if (!adModal.classList.contains("show")) {
-                    adModal.style.display = "flex";
-                    setTimeout(() => {
-                        adModal.classList.add("show");
-                        startCountdown();
-                    }, 50);
-                }
-            }, 3000);
-        }
-        
-        document.addEventListener('DOMContentLoaded', setupAdModal);
     </script>
 
 

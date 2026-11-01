@@ -4,7 +4,7 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom.minidom import parseString
 
 # 定义博客的域名
-baseUrl = "https://blog.ttxz.eu.org"  # 替换为你的博客域名
+baseUrl = "https://kb.dandanllab.top"  # 替换为你的博客域名
 blog_title = "天天的小站"  # 替换为你的博客名称
 
 def load_meta_data():

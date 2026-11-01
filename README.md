@@ -1,91 +1,35 @@
-# 静态博客系统说明
+# 蛋蛋知识库 · DandanLLab KB Portal
 
-## 概述
+DandanLLab 公开知识门户。纯静态、零依赖、免构建前端（原生 HTML/JS + marked + DOMPurify + highlight.js），文章源为 `md/` 目录下的 Markdown，由 GitHub Actions 自动生成 `data/` 索引后由前端直读。
 
+## 内容通道（三层兜底）
 
-本系统是一个基于 Markdown 的轻量级静态博客解决方案，使用JSON 数据和 PHP 脚本生成的静态博客系统，使用 HTML、CSS 和 JavaScript 前端渲染内容，无需传统数据库。所有文章内容均以 Markdown 格式存储，适合追求简洁高效的个人博客使用。
-## 技术架构
+1. **静态直读（默认）**：页面加载 `data/data.json`，全部文章索引与正文一次拉齐 —— GitHub Pages 直接出，不走任何 API。
+2. **公开 API（新内容增量）**：站点配置了公开 API 时，新文章可经 API 增量拉取；API 不通时自动回落静态数据。
+3. **服务器兜底**：私有 API 部署于自有服务器（priv.dandanllab.top），公开层仅暴露公开知识。
 
+## 发布流程
 
+- 往 `md/<分类>/` 丢 Markdown 文件（首行 `# 标题`，可用 YAML front-matter：`date` / `tags`）
+- push 后 Actions 自动跑 `generate_blog.py` → `generate_data_json.py` → `generate_sitemap.py` 并回推 `data/`
+- 线上域名：[kb.dandanllab.top](https://kb.dandanllab.top)（CNAME 已绑定 GitHub Pages）
 
-[Markdown] -> [PHP 生成 JSON] -> [前端html和js渲染] -> [浏览器展示]
+## 本地预览
 
-
-- **核心组件**：
-  - marked.js：Markdown 解析器
-  - highlight.js：代码语法高亮
-  - MathJax：数学公式渲染
-  - DOMPurify：内容安全过滤
-
+```sh
+python -m http.server 8000   # http://localhost:8000
+```
 
 ## 目录结构
 
 ```
-.
-├── admin/            # 管理后台
-├── md/               # Markdown 文档库
-│   └── 分类名称/     
-│       └── 文档.md  
-├── libs/             # 第三方依赖库
-├── blog.css          # 主样式表
-├── blog.js           # 前端逻辑
-├── json.php          # 数据生成入口
-├── s.js             # 搜索插件（隐藏展开按钮）可自定义功能
-└── ...
+md/            文章源（按分类分目录）
+data/          生成的索引与正文 JSON
+libs/          本地化的 marked / DOMPurify / highlight.js / MathJax
+generate_*.py  数据生成器（Actions 自动执行）
+blog.js        前端逻辑（列表/详情/搜索主题插件）
 ```
 
+## 隐私边界
 
-## 使用方法
-### 运行环境
--  Web 服务器：需要一个支持 PHP 的 Web 服务器（如 Apache 或 Nginx）。
-- 浏览器：使用现代浏览器访问博客页面。部署步骤
-    1. 将整个项目文件夹上传到 Web 服务器的根目录。
-     2. 确保  md  文件夹有写入权限，以便后台管理脚本可以创建和修改文件。
-     3. 访问  域名  查看博客内容。
-     4. 访问  /admin  进入后台管理界面。
-
-### 创建新文章
-1. 方式一：通过管理后台
-   - 访问 `/admin` 登录（默认账号：admin/admin）
-   - 使用可视化编辑器编写内容
-    - 选择分类并发布
-
-2. 方式二：手动创建
-   ```bash
-   # 在 md 目录创建分类文件夹
-   mkdir md/技术文章
-  
-   # 新建 Markdown 文件（推荐格式）
-   touch md/技术文章/服务器部署指南.md
-   ```
-
-### 文章规范
-- 文件命名：`标题.md`（示例：`静态博客指南.md`）
-  
-
-## 管理功能
-1. **内容管理**：
-   - 实时预览编辑
-   - 分类管理
-   - 草稿系统
-
-2. **系统维护**：
-   - 数据备份恢复 (`backup.php`)
-   - 静态资源打包
-   - 访问统计（需自行集成）
-
-## 安全配置
-```php
-// 修改默认凭证（auth.php）
-$valid_username = 'your_username';  // 修改管理员账号
-$valid_password = 'strong_password'; // 设置强密码
-```
-
-## 注意事项
-1. 定期执行 `/admin/backup.php` 进行数据备份
-2. Markdown 文件尽量使用 UTF-8 编码
-3. 分类目录需先在 md 文件夹中创建
-4. 修改凭证后需清除浏览器缓存
-
-> 系统持续更新中，建议定期关注 GitHub 仓库获取最新版本
-
+本仓库仅存放**允许公开**的知识。私密知识走独立体系（自有服务器 + 私有 API，双层授权），不入本仓库。

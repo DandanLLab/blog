@@ -7,7 +7,7 @@ on:
       - 'generate_data_json.py'
       - 'generate_sitemap.py'
       
-      - 'content/**'
+      - 'md/**'
       - 'requirements.txt'
     branches:
       - master
