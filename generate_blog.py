@@ -42,6 +42,31 @@ def _git_commit_time(path):
         return None
 
 
+_PLAIN_RULES = [
+    (re.compile(r'```.*?```', re.S), ' '),          # 代码块
+    (re.compile(r'`[^`]*`'), ' '),                  # 行内代码
+    (re.compile(r'!\[[^\]]*\]\([^)]*\)'), ' '),     # 图片
+    (re.compile(r'\[([^\]]*)\]\([^)]*\)'), r'\1'),  # 链接留文字
+    (re.compile(r'^\s{0,3}#{1,6}\s*', re.M), ''),   # 标题井号
+    (re.compile(r'^\s{0,3}>\s?', re.M), ''),        # 引用
+    (re.compile(r'^\s*[-*+]\s+', re.M), ''),        # 无序列表
+    (re.compile(r'^\s*\d+\.\s+', re.M), ''),        # 有序列表
+    (re.compile(r'\|'), ' '),                       # 表格竖线
+    (re.compile(r'[*_~]{1,3}'), ''),                # 强调符号
+    (re.compile(r'<[^>]+>'), ' '),                  # HTML 标签 / [标签] 块
+    (re.compile(r'\s+'), ' '),                      # 折叠空白
+]
+
+
+def _plain_text(md, limit=1200):
+    """把 Markdown 压成纯文本，供站内搜索与相关推荐打分（不参与展示）。"""
+    text = md
+    for pattern, repl in _PLAIN_RULES:
+        text = pattern.sub(repl, text)
+    text = text.strip()
+    return text[:limit]
+
+
 def generate_blog_data():
     try:
         config = load_config()['generator']
@@ -103,6 +128,7 @@ def generate_blog_data():
                 
                 # Build post entry
                 rel_path = os.path.relpath(file_path, md_dir).replace(os.path.sep, '/')
+                plain = _plain_text(content) if content else ''
                 posts.append({
                     'title': os.path.splitext(file)[0],
                     'created': created,
@@ -111,6 +137,8 @@ def generate_blog_data():
                     'archive': archive,
                     'path': rel_path,
                     'tags': post_tags,
+                    'words': len(re.sub(r'\s', '', plain)),
+                    'plain': plain,
                     '_timestamp': ctime
                 })
 

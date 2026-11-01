@@ -25,6 +25,10 @@ jobs:
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        # 必须全历史：generate_blog.py 用 git 首次提交时间做文章时间戳真源，
+        # 浅克隆会让 git log 拿不到结果，全部退化成构建时间（22 篇同一秒那次就是这么来的）
+        fetch-depth: 0
+        fetch-tags: true
 
     - name: Set up Python
       uses: actions/setup-python@v4
