@@ -1,0 +1,63 @@
+<!-- 404.html · 这篇没归档 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 · 这篇没归档 | 蛋蛋知识库</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="stylesheet" href="/normalize.min.css">
+    <link rel="stylesheet" href="/blog.css">
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('kb-theme');
+                var dark = saved ? saved === 'dark'
+                    : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+        })();
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <header class="site-header">
+            <a class="brand" href="/">
+                <img src="/icon.png" alt="蛋蛋知识库" class="site-icon">
+                <span class="site-title">蛋蛋知识库</span>
+                <span class="brand-sub">DandanLLab · 公开知识门户</span>
+            </a>
+        </header>
+
+        <main class="content-area">
+            <div class="not-found" style="max-width:640px;margin:8vh auto 12vh;">
+                <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;color:var(--text-3);text-transform:uppercase;margin-bottom:18px;">
+                    HTTP 404 · NOT ARCHIVED
+                </div>
+                <h2 style="font-size:26px;letter-spacing:-.01em;margin-bottom:14px;">这篇没归档</h2>
+                <p style="color:var(--text-2);font-size:15px;line-height:1.9;">
+                    你要找的页面不存在，可能已撤稿、改了标题，或者链接抄错了一个字符。<br>
+                    门户只收录标了「公开」的笔记，其余内容不在这一侧。
+                </p>
+
+                <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:26px;">
+                    <a class="back-button" href="/" style="text-decoration:none;">← 回首页</a>
+                    <a class="back-button" href="/?view=archive" style="text-decoration:none;">🗂 看归档</a>
+                    <a class="back-button" href="https://github.com/DandanLLab/blog" target="_blank" rel="noopener"
+                       style="text-decoration:none;">仓库</a>
+                </div>
+
+                <p style="font-family:var(--font-mono);font-size:11.5px;color:var(--text-3);margin-top:38px;">
+                    提示：站内搜索在首页，快捷键 <kbd style="font-family:var(--font-mono);border:1px solid var(--border);border-radius:2px;padding:1px 5px;">Ctrl</kbd>
+                    + <kbd style="font-family:var(--font-mono);border:1px solid var(--border);border-radius:2px;padding:1px 5px;">K</kbd>
+                </p>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -8,219 +8,193 @@
     <title>蛋蛋知识库 | DandanLLab 公开知识门户</title>
     <meta name="robots" content="all">
     <meta name="googlebot" content="ajax">
-    <meta name="description" content="蛋蛋知识库（DandanLLab）公开知识门户：技术笔记、知识库备份与公开文章，静态直读 + API 增量双通道。">
-    <meta name="keywords" content="知识库,技术博客,DandanLLab,蛋蛋知识库,公开知识,文章备份">
+    <meta name="description" content="蛋蛋知识库（DandanLLab）公开知识门户：书源规则、结绳教程、技术笔记与折腾记录。支持搜索、归档时间轴与暗色阅读。">
+    <meta name="keywords" content="知识库,技术博客,DandanLLab,蛋蛋知识库,公开知识,文章备份,书源规则,结绳">
     <link rel="canonical" href="https://kb.dandanllab.top/">
     <link rel="icon" href="icon.png" type="image/png">
-    <link rel="stylesheet" href="normalize.min.css">
     <link rel="shortcut icon" href="icon.png">
-
-    <link rel="stylesheet" href="github.min.css">
+    <link rel="apple-touch-icon" href="icon.png">
+    <meta name="theme-color" content="#fbf9f4" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0d1013" media="(prefers-color-scheme: dark)">
     <meta name="color-scheme" content="light dark">
+
+    <!-- 分享卡 -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="蛋蛋知识库">
+    <meta property="og:title" content="蛋蛋知识库 | DandanLLab 公开知识门户">
+    <meta property="og:description" content="书源规则、结绳教程、技术笔记与折腾记录。支持搜索、归档时间轴与暗色阅读。">
+    <meta property="og:url" content="https://kb.dandanllab.top/">
+    <meta property="og:image" content="https://kb.dandanllab.top/icon.png">
+    <meta name="twitter:card" content="summary">
+
+    <link rel="stylesheet" href="normalize.min.css">
+    <link rel="stylesheet" href="github.min.css">
     <link rel="stylesheet" href="github-markdown.css">
     <link rel="stylesheet" href="blog.css">
-    
+
+    <script>
+        // 抢在首帧前定主题，避免亮→暗闪一下
+        (function () {
+            try {
+                var q = new URLSearchParams(location.search).get('theme');
+                if (q === 'dark' || q === 'light') {
+                    document.documentElement.setAttribute('data-theme', q);
+                    return;
+                }
+                var saved = localStorage.getItem('kb-theme');
+                var dark = saved ? saved === 'dark'
+                    : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "蛋蛋知识库",
+      "alternateName": "DandanLLab 公开知识门户",
+      "url": "https://kb.dandanllab.top/",
+      "description": "书源规则、结绳教程、技术笔记与折腾记录。",
+      "inLanguage": "zh-CN"
+    }
+    </script>
 </head>
 
 <body>
+    <div class="read-progress" id="readProgress" aria-hidden="true">
+        <div class="read-progress__bar" id="readProgressBar"></div>
+    </div>
+
     <div class="container">
-        <div><img src="icon.png" alt="网站图标" class="site-icon">
-            <span class="site-title">蛋蛋知识库</span>
-            
-        </div>
-        <div class="kb-toolbar">
-            <div class="search-wrap">
-                <input type="search" id="search-input" class="search-input" placeholder="搜索文章…（标题/正文/标签）" autocomplete="off">
-                <div class="search-results" id="search-results" style="display:none"></div>
+        <header class="site-header">
+            <a class="brand" href="./" title="回到首页">
+                <img src="icon.png" alt="蛋蛋知识库" class="site-icon">
+                <span class="site-title">蛋蛋知识库</span>
+                <span class="brand-sub">DandanLLab · 公开知识门户</span>
+            </a>
+            <p class="stats-line" id="statsLine"></p>
+
+            <div class="kb-toolbar">
+                <div class="search-wrap">
+                    <input type="search" id="search-input" class="search-input"
+                           placeholder="搜索文章标题 / 分类 / 正文…（Ctrl+K）" autocomplete="off"
+                           aria-label="搜索文章">
+                    <div class="search-results" id="search-results" style="display:none"></div>
+                </div>
+                <div class="toolbar-actions">
+                    <button id="archive-btn" class="tool-btn" title="归档时间轴">🗂 归档</button>
+                    <button id="theme-btn" class="tool-btn" title="明暗切换">☾</button>
+                </div>
             </div>
-            <div class="toolbar-actions">
-                <button id="archive-btn" class="tool-btn" title="归档时间轴">🗂 归档</button>
-                <button id="theme-btn" class="tool-btn" title="明暗切换">🌙</button>
-            </div>
-        </div>
-        <nav class="main-nav" id="nav"></nav>
+
+            <nav class="main-nav" id="nav" aria-label="分类导航"></nav>
+        </header>
 
         <main class="content-area">
             <section class="post-list" id="postList"></section>
             <section class="archive-view" id="archiveView" style="display:none"></section>
-            <div id="loading" style="display: none;">加载中...</div>
-            <article class="post-detail" id="postDetail">
-                <article class="markdown-body">
-                    <div class="article-header">
+            <div id="loading" style="display: none;">LOADING…</div>
 
-
-                        <h1 id="articleTitle"></h1>
-                        <div class="meta-info">
+            <div class="post-layout" id="postLayout" style="display:none">
+                <article class="post-detail" id="postDetail">
+                    <header class="article-header">
+                        <div class="article-eyebrow">
                             <span class="category" id="articleCategory"></span>
                             <time class="created" id="articleCreated"></time>
-                            <div class="tags" id="articleTags">
-
-                            </div>
                         </div>
-                        <br>
-                        <p>
-                            <button class="back-button" id="backButton">← 返回列表</button>
-                        </p>
-                    </div>
-                    <div class="article-content" id="articleContent"></div>
-                    <div style="text-align: center;">
-                        <!-- 确保按钮水平居中 -->
+                        <h1 id="articleTitle"></h1>
+                        <div class="article-actions">
+                            <button class="back-button" id="backButton">← 全部文章</button>
+                            <button class="tool-btn" id="print-btn" title="打印或导出 PDF">⎙ 打印 / PDF</button>
+                        </div>
+                        <div class="tags" id="articleTags"></div>
+                    </header>
+
+                    <div class="article-content markdown-body" id="articleContent"></div>
+
+                    <section class="related" id="related" style="display:none" aria-label="相关推荐"></section>
+
+                    <div class="donate-wrap">
                         <button id="donateButton">赏</button>
                     </div>
 
-                    <!-- 弹窗元素 -->
+                    <!-- 打赏弹窗（师父模块，结构不动） -->
                     <div id="donateModal" class="modal">
                         <div class="modal-content">
                             <span class="close">&times;</span>
                             <h3>支持一下 ☕</h3>
                             <p>打赏作者喝杯咖啡，感谢支持！</p>
                             <div class="qr-code">
-                                <!-- 在这里插入二维码图片 -->
                                 <img src="mm_reward_qrcode_1743673093708.png" alt="打赏二维码" style="max-width: 100%;">
                             </div>
                             <p>✨祝你天天开心✨</p>
                             <p>根据自身经济情况打赏即可，感谢支持！</p>
                         </div>
                     </div>
-                    <hr>
                 </article>
-            </article>
 
+                <aside class="toc-panel" id="tocPanel" aria-label="文章目录">
+                    <div class="toc-head"><span>目录</span><span id="tocCount"></span></div>
+                    <nav class="toc-list" id="tocList"></nav>
+                </aside>
+            </div>
         </main>
     </div>
 
-
-    <div class="copy-success" id="copySuccess">复制成功！</div>
+    <div class="copy-success" id="copySuccess">已复制</div>
 
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h4>版权信息</h4>
-                <p>&copy; 2024-2026 DandanLLab · 蛋蛋实验室</p>
+                <h4>版权</h4>
+                <p>&copy; 2024–2026 DandanLLab<br>蛋蛋实验室</p>
             </div>
             <div class="footer-section">
-                <h4>联系作者</h4>
+                <h4>联系</h4>
                 <ul>
-                    <li>GitHub<a href="https://github.com/DandanLLab" class="source-link" target="_blank"> @DandanLLab</a></li>
+                    <li><a href="https://github.com/DandanLLab" target="_blank" rel="noopener" class="source-link">GitHub @DandanLLab</a></li>
+                    <li><a href="https://www.dandanllab.top" target="_blank" rel="noopener">主站</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4>站点导航</h4>
+                <h4>本站</h4>
                 <ul>
-                    <li><a href="https://www.dandanllab.top" target="_blank">主站</a></li>
-                    <li><a href="https://github.com/DandanLLab/blog" target="_blank">文章备份仓库</a></li>
+                    <li><a href="https://github.com/DandanLLab/blog" target="_blank" rel="noopener">文章备份仓库</a></li>
+                    <li><a href="sitemap.xml">站点地图</a></li>
                 </ul>
             </div>
         </div>
+        <p class="footer-note">门户只收录可公开分享的内容 · 时间戳以 Git 首次提交为准</p>
     </footer>
 
+    <button id="backTop" class="back-top" title="回到顶部" style="display:none">↑</button>
 
-    <!--  cdnjs CDN -->
+    <!-- 依赖库 -->
     <script src="./libs/marked/marked.min.js"></script>
     <script src="./libs/dompurify/purify.min.js"></script>
     <script src="./libs/highlight.js/highlight.min.js"></script>
     <script src="./libs/mathjax/es5/tex-mml-chtml.js"></script>
     <script src="blog.js"></script>
 
-
-    <style>
-        /* 打赏按钮样式 */
-        #donateButton {
-            display: inline-block;
-            width: 64px;
-            /* 按钮宽度 */
-            height: 64px;
-            /* 按钮高度 */
-            line-height: 20px;
-            /* 使文字垂直居中 */
-            background-color: orange;
-            /* 橙色背景 */
-            border: none;
-            border-radius: 50%;
-            /* 圆形按钮 */
-            font-size: 48px;
-            /* 字体放大 */
-            font-weight: bold;
-            color: gold;
-            /* 金色字体 */
-            cursor: pointer;
-            outline: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            /* 添加阴影效果 */
-            text-align: center;
-            /* 文字水平居中 */
-            margin: 20px auto;
-            /* 按钮水平居中 */
-        }
-
-        /* 弹窗样式 */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content-ad {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .qr-code {
-            margin: 20px 0;
-        }
-    </style>
-
     <script>
-        // 获取打赏按钮和弹窗元素
+        // 打赏弹窗（行为保持不变）
         var donateButton = document.getElementById("donateButton");
         var donateModal = document.getElementById("donateModal");
-        var closeButton = document.querySelector(".close");
+        var closeButton = document.querySelector("#donateModal .close");
 
-        // 点击打赏按钮时弹出弹窗
-        donateButton.onclick = function() {
-            donateModal.style.display = "block";
-        }
-
-        // 点击关闭按钮时关闭弹窗
-        closeButton.onclick = function() {
-            donateModal.style.display = "none";
-        }
-
-        // 点击弹窗外的区域时关闭弹窗
-        window.onclick = function(event) {
-            if (event.target == donateModal) {
-                donateModal.style.display = "none";
-            }
-        }
+        donateButton.onclick = function () { donateModal.style.display = "block"; };
+        closeButton.onclick = function () { donateModal.style.display = "none"; };
+        window.addEventListener("click", function (event) {
+            if (event.target == donateModal) donateModal.style.display = "none";
+        });
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") donateModal.style.display = "none";
+        });
     </script>
-
-
-    <button id="backTop" class="back-top" title="回到顶部" style="display:none">↑</button>
 </body>
 
 </html>
